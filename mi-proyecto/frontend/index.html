@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechStore | Informática y Hardware</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-light text-dark">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm sticky-top">
+        <div class="container">
+            <a class="navbar-brand text-primary fw-bold fs-4" href="#" id="nav-logo">TechStore</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link text-dark fw-medium" href="#" id="nav-catalogo">Catálogo</a></li>
+                    <li class="nav-item d-none auth-required"><a class="nav-link text-dark fw-medium" href="#" id="nav-vender">Vender</a></li>
+                    <li class="nav-item d-none auth-required"><a class="nav-link text-dark fw-medium" href="#" id="nav-dashboard">Mis Pedidos</a></li>
+                </ul>
+                <div class="d-flex align-items-center gap-3 mt-3 mt-lg-0">
+                    <div id="user-info" class="d-none align-items-center gap-2">
+                        <span id="user-name" class="text-secondary fw-bold"></span>
+                        <span id="user-wallet" class="badge bg-primary fs-6 shadow-sm">0.00 €</span>
+                        <button id="btn-recargar" class="btn btn-sm btn-success fw-bold" title="Recargar Saldo">+</button>
+                    </div>
+                    <button id="nav-login" class="btn btn-outline-primary btn-sm guest-only fw-bold">Iniciar Sesión</button>
+                    <button id="nav-logout" class="btn btn-outline-danger btn-sm d-none auth-required fw-bold">Salir</button>
+                    <button id="nav-carrito" class="btn btn-dark btn-sm position-relative fw-bold">
+                        🛒 Mi Cesta 
+                        <span id="cart-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container my-5">
+
+        <!-- CATÁLOGO (público) -->
+        <section id="vista-catalogo" class="vista">
+            <h2 class="mb-4 text-center fw-bold text-dark">Componentes y Periféricos</h2>
+            <div id="product-grid" class="row g-4"></div>
+        </section>
+
+        <!-- LOGIN / REGISTRO -->
+        <section id="vista-login" class="vista d-none">
+            <div class="row justify-content-center">
+                <div class="col-md-6 col-lg-5">
+
+                    <div class="card bg-white border-0 shadow-sm mb-4" id="caja-login">
+                        <div class="card-body p-5">
+                            <h3 class="text-center fw-bold mb-4">Acceso a clientes</h3>
+                            <form id="form-login" novalidate>
+                                <div class="mb-3">
+                                    <label class="form-label text-muted small fw-bold">Email o Nombre de usuario</label>
+                                    <input type="text" id="login-user" class="form-control" maxlength="100" required>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label text-muted small fw-bold">Contraseña</label>
+                                    <input type="password" id="login-pass" class="form-control" maxlength="128" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100 fw-bold py-2">Iniciar Sesión</button>
+                            </form>
+                            <div class="text-center mt-4">
+                                <small class="text-muted">¿Eres nuevo? <a href="#" id="link-registro" class="text-primary fw-bold text-decoration-none">Crea tu cuenta</a></small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card bg-white border-0 shadow-sm d-none" id="caja-registro">
+                        <div class="card-body p-5">
+                            <h3 class="text-center fw-bold mb-4">Nueva cuenta</h3>
+                            <form id="form-registro" novalidate>
+                                <div class="mb-3">
+                                    <label class="form-label text-muted small fw-bold">Correo Electrónico</label>
+                                    <input type="email" id="reg-email" class="form-control" placeholder="ejemplo@correo.com" maxlength="150" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label text-muted small fw-bold">Nombre de usuario <small class="text-muted">(máx. 30 caracteres)</small></label>
+                                    <input type="text" id="reg-user" class="form-control" placeholder="Ej: TechLover99" maxlength="30" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label text-muted small fw-bold">Contraseña <small class="text-muted">(mín. 6 caracteres)</small></label>
+                                    <input type="password" id="reg-pass" class="form-control" minlength="6" maxlength="128" required>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label text-muted small fw-bold">Confirmar Contraseña</label>
+                                    <input type="password" id="reg-pass-confirm" class="form-control" maxlength="128" required>
+                                </div>
+                                <button type="submit" class="btn btn-dark w-100 fw-bold py-2">Registrarse</button>
+                            </form>
+                            <div class="text-center mt-4">
+                                <small class="text-muted">¿Ya tienes cuenta? <a href="#" id="link-login" class="text-primary fw-bold text-decoration-none">Inicia sesión</a></small>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- VENDER (protegida) -->
+        <section id="vista-vender" class="vista d-none">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card bg-white border-0 shadow-sm">
+                        <div class="card-body p-5">
+                            <h3 class="fw-bold mb-4">Publicar artículo</h3>
+                            <form id="form-crear-producto" novalidate>
+                                <div class="mb-3">
+                                    <label class="form-label text-muted small fw-bold">Nombre del producto <small class="text-muted">(máx. 100 caracteres)</small></label>
+                                    <input type="text" id="prod-nombre" class="form-control" maxlength="100" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label text-muted small fw-bold">Descripción <small class="text-muted">(máx. 500 caracteres)</small></label>
+                                    <textarea id="prod-desc" class="form-control" rows="3" maxlength="500" required></textarea>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label text-muted small fw-bold">Precio (€)</label>
+                                        <input type="number" id="prod-precio" step="0.01" min="0.01" max="999999" class="form-control" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label text-muted small fw-bold">URL de la Imagen (Opcional)</label>
+                                        <input type="url" id="prod-img" class="form-control" placeholder="https://ejemplo.com/foto.jpg">
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100 fw-bold py-2 mt-3">Subir Producto</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DASHBOARD (protegida) -->
+        <section id="vista-dashboard" class="vista d-none">
+            <h2 class="mb-4 fw-bold">Mi Panel</h2>
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="card bg-white border-0 shadow-sm h-100">
+                        <div class="card-header bg-white border-bottom fw-bold py-3">Mis Anuncios Activos</div>
+                        <ul id="lista-mis-productos" class="list-group list-group-flush"></ul>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card bg-white border-0 shadow-sm h-100">
+                        <div class="card-header bg-white border-bottom fw-bold py-3">Historial de Compras</div>
+                        <ul id="lista-mis-compras" class="list-group list-group-flush"></ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CARRITO (protegida) -->
+        <section id="vista-carrito" class="vista d-none">
+            <h2 class="mb-4 fw-bold">Tu Cesta</h2>
+            <div class="row">
+                <div class="col-lg-8 mb-4 mb-lg-0">
+                    <div class="card bg-white border-0 shadow-sm">
+                        <ul id="items-carrito" class="list-group list-group-flush"></ul>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card bg-white border-0 shadow-sm sticky-top" style="top: 90px;">
+                        <div class="card-body p-4">
+                            <h4 class="fw-bold mb-3">Resumen</h4>
+                            <hr class="text-muted">
+                            <div class="d-flex justify-content-between mb-4 fs-4">
+                                <span class="text-secondary">Total:</span>
+                                <span class="fw-bold text-dark" id="total-carrito">0.00 €</span>
+                            </div>
+                            <button id="btn-checkout" class="btn btn-primary w-100 fw-bold py-3">Tramitar Pedido</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL EDITAR PRODUCTO (solo visible para el vendedor) -->
+    <div class="modal fade" id="modal-editar" tabindex="-1" aria-labelledby="modal-editar-titulo" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold" id="modal-editar-titulo">Editar producto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body px-4 pb-4">
+                    <form id="form-editar-producto" novalidate>
+                        <input type="hidden" id="edit-prod-id">
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">Nombre <small class="text-muted">(máx. 100 caracteres)</small></label>
+                            <input type="text" id="edit-prod-nombre" class="form-control" maxlength="100" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">Descripción <small class="text-muted">(máx. 500 caracteres)</small></label>
+                            <textarea id="edit-prod-desc" class="form-control" rows="3" maxlength="500" required></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-muted small fw-bold">Precio (€)</label>
+                                <input type="number" id="edit-prod-precio" step="0.01" min="0.01" max="999999" class="form-control" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-muted small fw-bold">URL Imagen (Opcional)</label>
+                                <input type="url" id="edit-prod-img" class="form-control" placeholder="https://ejemplo.com/foto.jpg">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 fw-bold py-2 mt-2">Guardar cambios</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
